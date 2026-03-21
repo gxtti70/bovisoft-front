@@ -3,21 +3,30 @@ import { ref } from 'vue';
 import axios from 'axios';
 import { GoogleLogin } from 'vue3-google-login';
 
-// Evento que le avisará a App.vue que el usuario entró correctamente
+/**
+ * --- CONFIGURACIÓN DE URL ---
+ * Centralizamos la URL. Si existe la variable en el .env (producción), la usa.
+ * Si no (desarrollo local), usa el localhost.
+ */
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000/api';
+
+// Evento para avisar al App.vue que el usuario entró
 const emit = defineEmits(['accesoConcedido']);
 
-// Controla qué pantalla se ve: 'login', 'registro' o 'recuperar'
+// Estado de la interfaz
 const vistaActual = ref('login'); 
-
-// Variables del formulario
-const nombre = ref('');
-const correo = ref('');
-const password = ref('');
 const cargando = ref(false);
 const mensajeError = ref('');
 const mensajeExito = ref('');
 
-// --- 1. LÓGICA DE LOGIN TRADICIONAL ---
+// Campos del formulario
+const nombre = ref('');
+const correo = ref('');
+const password = ref('');
+
+/**
+ * 1. INICIAR SESIÓN (TRADICIONAL)
+ */
 const iniciarSesion = async () => {
   if (!correo.value || !password.value) {
     mensajeError.value = "Por favor, llena todos los campos.";
@@ -28,7 +37,7 @@ const iniciarSesion = async () => {
   mensajeError.value = '';
   
   try {
-    const response = await axios.post('http://localhost:4000/api/auth/login', {
+    const response = await axios.post(`${API_URL}/auth/login`, {
       correo: correo.value,
       password: password.value
     });
@@ -45,13 +54,15 @@ const iniciarSesion = async () => {
   }
 };
 
-// --- 1.5 LÓGICA DE LOGIN CON GOOGLE ---
+/**
+ * 2. INICIAR SESIÓN (GOOGLE)
+ */
 const iniciarSesionGoogle = async (response: any) => {
   cargando.value = true;
   mensajeError.value = '';
   
   try {
-    const res = await axios.post('http://localhost:4000/api/auth/google', {
+    const res = await axios.post(`${API_URL}/auth/google`, {
       token: response.credential
     });
     
@@ -67,7 +78,9 @@ const iniciarSesionGoogle = async (response: any) => {
   }
 };
 
-// --- 2. LÓGICA DE REGISTRO ---
+/**
+ * 3. REGISTRAR CUENTA
+ */
 const registrarCuenta = async () => {
   if (!nombre.value || !correo.value || !password.value) {
     mensajeError.value = "Todos los campos son obligatorios.";
@@ -78,7 +91,7 @@ const registrarCuenta = async () => {
   mensajeError.value = '';
 
   try {
-    const response = await axios.post('http://localhost:4000/api/auth/registro', {
+    const response = await axios.post(`${API_URL}/auth/registro`, {
       nombre: nombre.value,
       correo: correo.value,
       password: password.value
@@ -96,7 +109,9 @@ const registrarCuenta = async () => {
   }
 };
 
-// --- 3. LÓGICA DE RECUPERAR ---
+/**
+ * 4. RECUPERAR CONTRASEÑA (SIMULADO)
+ */
 const recuperarPassword = () => {
   if (!correo.value) {
     mensajeError.value = "Ingresa tu correo para enviarte las instrucciones.";
@@ -110,7 +125,7 @@ const recuperarPassword = () => {
   }, 1500);
 };
 
-// Utilidad para limpiar mensajes
+// Utilidad para limpiar mensajes al cambiar de vista
 const cambiarVista = (nuevaVista: string) => {
   vistaActual.value = nuevaVista;
   mensajeError.value = '';
@@ -141,14 +156,14 @@ const cambiarVista = (nuevaVista: string) => {
           <form @submit.prevent="iniciarSesion" class="space-y-5">
             <div>
               <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Correo Electrónico</label>
-              <input v-model="correo" type="email" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-ganadero-green outline-none font-medium" placeholder="admin@hacienda.com" />
+              <input v-model="correo" type="email" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-ganadero-green outline-none font-medium" placeholder="admin@hacienda.com" required />
             </div>
             <div>
               <div class="flex justify-between mb-1">
                 <label class="block text-xs font-bold text-gray-500 uppercase">Contraseña</label>
                 <button type="button" @click="cambiarVista('recuperar')" class="text-xs font-bold text-ganadero-green hover:underline">¿Olvidaste tu clave?</button>
               </div>
-              <input v-model="password" type="password" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-ganadero-green outline-none font-medium" placeholder="••••••••" />
+              <input v-model="password" type="password" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-ganadero-green outline-none font-medium" placeholder="••••••••" required />
             </div>
             <button type="submit" :disabled="cargando" class="w-full py-3 bg-ganadero-dark text-white rounded-xl font-bold shadow-lg hover:bg-gray-800 transition disabled:opacity-50 mt-2">
               {{ cargando ? 'Verificando...' : 'Iniciar Sesión' }}
@@ -172,15 +187,15 @@ const cambiarVista = (nuevaVista: string) => {
         <form v-else-if="vistaActual === 'registro'" @submit.prevent="registrarCuenta" class="space-y-4">
           <div>
             <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Nombre Completo</label>
-            <input v-model="nombre" type="text" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-ganadero-green outline-none font-medium" placeholder="Ej: Santiago" />
+            <input v-model="nombre" type="text" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-ganadero-green outline-none font-medium" placeholder="Ej: Santiago" required />
           </div>
           <div>
             <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Correo Electrónico</label>
-            <input v-model="correo" type="email" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-ganadero-green outline-none font-medium" placeholder="tu@correo.com" />
+            <input v-model="correo" type="email" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-ganadero-green outline-none font-medium" placeholder="tu@correo.com" required />
           </div>
           <div>
             <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Crear Contraseña</label>
-            <input v-model="password" type="password" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-ganadero-green outline-none font-medium" placeholder="Mínimo 6 caracteres" />
+            <input v-model="password" type="password" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-ganadero-green outline-none font-medium" placeholder="Mínimo 6 caracteres" required />
           </div>
           <button type="submit" :disabled="cargando" class="w-full py-3 bg-ganadero-green text-white rounded-xl font-bold shadow-lg hover:bg-green-700 transition disabled:opacity-50 mt-2">
             {{ cargando ? 'Creando cuenta...' : 'Crear Cuenta' }}
@@ -194,7 +209,7 @@ const cambiarVista = (nuevaVista: string) => {
           <p class="text-sm text-gray-500 text-center mb-4">Ingresa tu correo y te enviaremos las instrucciones para recuperar el acceso a tu hacienda.</p>
           <div>
             <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Correo Electrónico</label>
-            <input v-model="correo" type="email" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-ganadero-green outline-none font-medium" placeholder="admin@hacienda.com" />
+            <input v-model="correo" type="email" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-ganadero-green outline-none font-medium" placeholder="admin@hacienda.com" required />
           </div>
           <button type="submit" :disabled="cargando" class="w-full py-3 bg-blue-600 text-white rounded-xl font-bold shadow-lg hover:bg-blue-700 transition disabled:opacity-50 mt-2">
             {{ cargando ? 'Enviando...' : 'Enviar Instrucciones' }}
