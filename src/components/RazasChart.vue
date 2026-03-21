@@ -26,9 +26,10 @@ const chartData = computed(() => {
     labels: Object.keys(conteo),
     datasets: [{
       label: 'Cabezas',
-      data: Object.values(conteo),
-      // Asigna un color diferente a cada barra
-      backgroundColor: Object.keys(conteo).map((_, i) => colores[i % colores.length]),
+      // EL CAMBIO: Le decimos a TS que esto es estrictamente un array de números
+      data: Object.values(conteo) as number[], 
+      // Aseguramos que los colores siempre sean strings válidos
+      backgroundColor: Object.keys(conteo).map((_, i) => colores[i % colores.length]) as string[],
       borderRadius: 8
     }]
   };
@@ -37,12 +38,25 @@ const chartData = computed(() => {
 const chartOptions = {
   responsive: true,
   maintainAspectRatio: false,
-  plugins: { legend: { display: false } }
+  plugins: { 
+    legend: { display: false } 
+  },
+  scales: {
+    y: {
+      beginAtZero: true,
+      ticks: {
+        stepSize: 1 // Para que no salgan decimales en el conteo de vacas
+      }
+    }
+  }
 };
 </script>
 
 <template>
   <div class="h-64">
-    <Bar :data="chartData" :options="chartOptions" />
+    <Bar v-if="props.datos.length > 0" :data="chartData" :options="chartOptions" />
+    <div v-else class="h-full flex items-center justify-center text-gray-400 text-sm italic">
+      No hay datos para mostrar
+    </div>
   </div>
 </template>
