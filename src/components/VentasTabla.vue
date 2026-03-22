@@ -18,7 +18,6 @@ const getConfig = () => {
 
 const fetchVentas = async () => {
   try {
-    // --- 2. USAMOS LA URL DINÁMICA AQUÍ ---
     const response = await axios.get(`${API_URL}/animales/ventas-historial`, getConfig());
     ventas.value = response.data.ventas || [];
   } catch (error) {
@@ -83,34 +82,66 @@ onMounted(() => {
       Aún no se han registrado ventas en el sistema.
     </div>
 
-    <div v-else class="overflow-x-auto">
-      <table class="w-full text-left border-collapse min-w-[600px]">
-        <thead>
-          <tr class="bg-gray-50 text-gray-500 text-xs uppercase tracking-wider">
-            <th class="p-4 font-bold whitespace-nowrap">Fecha</th>
-            <th class="p-4 font-bold whitespace-nowrap">Animal Vendido</th>
-            <th class="p-4 font-bold whitespace-nowrap">Comprador</th>
-            <th class="p-4 font-bold text-right whitespace-nowrap">Precio de Venta</th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-gray-50">
-          <tr v-for="venta in ventas" :key="venta.id" class="hover:bg-blue-50/30 transition-colors">
-            <td class="p-4 text-sm text-gray-500 font-medium whitespace-nowrap">
+    <div v-else>
+      
+      <div class="block sm:hidden divide-y divide-gray-100">
+        <div v-for="venta in ventas" :key="'mob-'+venta.id" class="p-4 hover:bg-blue-50/30 transition-colors">
+          
+          <div class="flex justify-between items-start mb-2">
+            <div>
+              <p class="font-bold text-gray-800 text-lg leading-none">{{ venta.nombre_animal }}</p>
+              <p class="text-xs text-gray-400 mt-1">Arete: {{ venta.arete_visual }}</p>
+            </div>
+            <span class="text-xs text-gray-500 font-medium bg-gray-100 px-2 py-1 rounded">
               {{ new Date(venta.fecha_venta).toLocaleDateString() }}
-            </td>
-            <td class="p-4 whitespace-nowrap">
-              <p class="font-bold text-gray-800">{{ venta.nombre_animal }}</p>
-              <p class="text-xs text-gray-400">Arete: {{ venta.arete_visual }}</p>
-            </td>
-            <td class="p-4 text-sm font-medium text-gray-600 whitespace-nowrap">
-              <span class="bg-gray-100 px-2 py-1 rounded text-gray-600">{{ venta.cliente }}</span>
-            </td>
-            <td class="p-4 text-right font-black text-blue-600 text-lg whitespace-nowrap">
-              $ {{ Number(venta.precio_venta).toLocaleString() }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
+            </span>
+          </div>
+
+          <div class="flex justify-between items-end mt-4">
+            <div class="flex-1 pr-2">
+              <p class="text-[10px] font-bold text-gray-400 uppercase mb-0.5">Comprador</p>
+              <p class="text-sm font-medium text-gray-700 truncate">👤 {{ venta.cliente }}</p>
+            </div>
+            <div class="text-right">
+              <p class="font-black text-blue-600 text-xl leading-none">
+                $ {{ Number(venta.precio_venta).toLocaleString() }}
+              </p>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+
+      <div class="hidden sm:block overflow-x-auto">
+        <table class="w-full text-left border-collapse min-w-[600px]">
+          <thead>
+            <tr class="bg-gray-50 text-gray-500 text-xs uppercase tracking-wider">
+              <th class="p-4 font-bold whitespace-nowrap">Fecha</th>
+              <th class="p-4 font-bold whitespace-nowrap">Animal Vendido</th>
+              <th class="p-4 font-bold whitespace-nowrap">Comprador</th>
+              <th class="p-4 font-bold text-right whitespace-nowrap">Precio de Venta</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-50">
+            <tr v-for="venta in ventas" :key="venta.id" class="hover:bg-blue-50/30 transition-colors">
+              <td class="p-4 text-sm text-gray-500 font-medium whitespace-nowrap">
+                {{ new Date(venta.fecha_venta).toLocaleDateString() }}
+              </td>
+              <td class="p-4 whitespace-nowrap">
+                <p class="font-bold text-gray-800">{{ venta.nombre_animal }}</p>
+                <p class="text-xs text-gray-400">Arete: {{ venta.arete_visual }}</p>
+              </td>
+              <td class="p-4 text-sm font-medium text-gray-600 whitespace-nowrap">
+                <span class="bg-gray-100 px-2 py-1 rounded text-gray-600">{{ venta.cliente }}</span>
+              </td>
+              <td class="p-4 text-right font-black text-blue-600 text-lg whitespace-nowrap">
+                $ {{ Number(venta.precio_venta).toLocaleString() }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
     </div>
   </div>
 </template>

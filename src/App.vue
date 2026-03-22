@@ -68,11 +68,11 @@ const navegar = (ruta: string) => {
           </svg>
         </button>
 
-        <div class="flex items-center gap-2 md:gap-4">
-          <img :src="logoSvg" alt="Logo" class="h-10 md:h-16 w-auto brightness-0 invert" />
-          <div class="flex flex-col">
-            <h1 class="text-lg md:text-2xl font-extrabold tracking-widest leading-none">BOVISOFT</h1>
-            <span class="text-[10px] md:text-sm font-light text-ganadero-green mt-1">Gestión Ganadera</span>
+        <div class="flex items-center gap-2 md:gap-3">
+          <img :src="logoSvg" alt="Logo" class="h-8 md:h-12 w-auto brightness-0 invert object-contain" />
+          <div class="flex flex-col justify-center">
+            <h1 class="text-base md:text-2xl font-extrabold tracking-widest leading-none">BOVISOFT</h1>
+            <span class="text-[9px] md:text-sm font-light text-ganadero-green mt-0.5">Gestión Ganadera</span>
           </div>
         </div>
 
