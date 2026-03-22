@@ -15,7 +15,7 @@ const hacienda = ref('');
 const propietario = ref('');
 const correo = ref('');
 
-// --- VARIABLES PARA LOS SELECTORES (Simulados por ahora) ---
+// --- VARIABLES PARA LOS SELECTORES 
 const moneda = ref('COP');
 const unidadPeso = ref('KG');
 
