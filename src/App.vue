@@ -4,6 +4,10 @@ import { useRouter, useRoute } from 'vue-router';
 import { useAnimalStore } from './stores/animalStore';
 import axios from 'axios';
 
+// --- NUEVA CORRECCIÓN DE LOGO ---
+// Importamos el logo para que Vite lo maneje correctamente en producción
+import logoSvg from './assets/logo.svg';
+
 const store = useAnimalStore();
 const router = useRouter();
 const route = useRoute();
@@ -13,13 +17,12 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000/api';
 
 const usuarioActual = ref<any>(null);
 const mostrarMenuPerfil = ref(false);
-const mostrarMenuMovil = ref(false); // <-- Nuevo estado para el celular
+const mostrarMenuMovil = ref(false);
 
 const cerrarSesion = async () => {
   try {
     const token = localStorage.getItem('bovisoft_token');
     if (token) {
-      // Usamos la API_URL dinámica
       await axios.post(`${API_URL}/auth/logout`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -67,10 +70,10 @@ const navegar = (ruta: string) => {
         </button>
 
         <div class="flex items-center gap-2 md:gap-4">
-          <img src="./assets/logo.svg" alt="Logo" class="h-10 md:h-16 w-auto brightness-0 invert" />
+          <img :src="logoSvg" alt="Logo" class="h-10 md:h-16 w-auto brightness-0 invert" />
           <div class="flex flex-col">
             <h1 class="text-lg md:text-2xl font-extrabold tracking-widest leading-none">BOVISOFT</h1>
-            <span class="text-[10px] md:text-sm font-light text-ganadero-green mt-1">Gestión Ganadera</span>
+            <span class="text-[10px] md:text-sm font-light text-ganadero-green mt-1 text-center">Gestión Ganadera</span>
           </div>
         </div>
 
@@ -81,18 +84,23 @@ const navegar = (ruta: string) => {
           <router-link to="/configuracion" class="transition-all pb-1 border-b-2" :class="route.path === '/configuracion' ? 'text-white border-ganadero-green' : 'border-transparent hover:text-white'">Configuración</router-link>
         </div>
 
-        <div class="flex items-center gap-3 relative">
-          <div class="text-right hidden sm:block">
-            <p class="text-sm font-bold leading-none text-white">{{ usuarioActual?.nombre || 'Usuario' }}</p>
-            <p class="text-xs text-ganadero-green mt-1 font-medium">{{ usuarioActual?.nombre_hacienda || 'Mi Hacienda' }}</p>
+        <div class="relative flex flex-col items-center gap-1 sm:flex-row sm:gap-3">
+          
+          <div class="text-center sm:text-right order-last sm:order-first">
+            <p class="text-sm font-bold leading-none text-white hidden sm:block">
+              {{ usuarioActual?.nombre || 'Usuario' }}
+            </p>
+            <p class="text-[11px] sm:text-xs text-ganadero-green mt-1 font-semibold leading-none sm:leading-normal">
+              {{ usuarioActual?.nombre_hacienda || 'Mi Hacienda' }}
+            </p>
           </div>
 
           <button @click="mostrarMenuPerfil = !mostrarMenuPerfil"
-            class="w-10 h-10 rounded-full bg-gray-600 border-2 border-ganadero-green text-white font-bold hover:scale-105 transition font-mono text-sm">
+            class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gray-600 border-2 border-ganadero-green text-white font-bold hover:scale-105 transition font-mono text-sm order-first sm:order-last">
             {{ usuarioActual?.nombre?.charAt(0).toUpperCase() || 'U' }}
           </button>
           
-          <div v-if="mostrarMenuPerfil" class="absolute right-0 top-12 mt-2 w-64 bg-white rounded-2xl shadow-xl border border-gray-100 p-2 z-50 animate-fade-in text-gray-800">
+          <div v-if="mostrarMenuPerfil" class="absolute right-0 top-16 sm:top-12 mt-2 w-64 bg-white rounded-2xl shadow-xl border border-gray-100 p-2 z-50 animate-fade-in text-gray-800">
             <div class="p-3 border-b border-gray-50 mb-2">
                 <p class="font-bold text-gray-800 text-base">{{ usuarioActual?.nombre || 'Usuario' }}</p>
                 <p class="text-xs text-gray-400 font-medium truncate block w-full">{{ usuarioActual?.correo }}</p>
@@ -115,7 +123,7 @@ const navegar = (ruta: string) => {
       </div>
     </nav>
 
-    <main class="container mx-auto mt-4 md:mt-8 px-4 pb-12">
+    <main class="container mx-auto mt-4 md:mt-8 px-4 pb-12 relative z-10">
       <router-view />
     </main>
   </div>
