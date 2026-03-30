@@ -1,39 +1,49 @@
-# ganaderia-front
+# 🐄 BOVISOFT - Sistema de Gestión Ganadera SaaS
 
-This template should help get you started developing with Vue 3 in Vite.
+![Vue.js](https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vue.js&logoColor=4FC08D)
+![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-B73BFE?style=for-the-badge&logo=vite&logoColor=FFD62E)
 
-## Recommended IDE Setup
+**Bovisoft** es una aplicación web Full-Stack diseñada para digitalizar, organizar y optimizar la administración de fincas ganaderas. Construida bajo una arquitectura **Mobile-First**, permite a los propietarios gestionar su inventario, analizar métricas en tiempo real y registrar ventas directamente desde el campo a través de sus dispositivos móviles.
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+🔗 **[Visita la aplicación en vivo aquí](bovisoft-front.vercel.app)**
 
-## Recommended Browser Setup
+---
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+## ✨ Características Principales
 
-## Type Support for `.vue` Imports in TS
+* 📱 **Diseño 100% Responsivo:** Interfaz adaptada para celulares mediante "Tarjetas" (Cards) dinámicas, menús interactivos y modales sobrepuestos con `<Teleport>` para una experiencia de usuario fluida sin importar el tamaño de la pantalla.
+* 📊 **Dashboard Analítico:** Visualización en tiempo real de la biomasa total, peso promedio, distribución por razas y proporción de género utilizando **Chart.js**.
+* 🐄 **Gestión de Inventario (CRUD):** Registro detallado de bovinos (arete visual, nombre, raza, género, peso).
+* 💰 **Módulo de Ventas:** Registro de transacciones financieras con validación de inputs y formateo de moneda en tiempo real.
+* 📄 **Exportación de Reportes:** Generación automática del historial comercial en formato Excel `.xlsx` mediante la librería **SheetJS**.
+* 🔐 **Autenticación y Perfil:** Sistema de login seguro con JWT y panel de configuración de usuario para personalizar los datos de la hacienda.
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+---
 
-## Customize configuration
+## 🛠️ Stack Tecnológico
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+**Frontend:**
+* **Framework:** Vue 3 (Composition API)
+* **Lenguaje:** TypeScript
+* **Estilos:** Tailwind CSS
+* **Build Tool:** Vite
+* **Gestor de Estado:** Pinia
+* **Peticiones HTTP:** Axios
+* **Librerías Extra:** Chart.js, vue-chartjs, xlsx (SheetJS)
 
-## Project Setup
+**Backend / Infraestructura:**
+* **API:** Node.js / Express 
+* **Base de Datos:** PostgreSQL
+* **Despliegue:** Vercel (Frontend)
 
-```sh
-npm install
-```
+---
 
-### Compile and Hot-Reload for Development
+## 🚀 Instalación y Uso Local
 
-```sh
-npm run dev
-```
+Si deseas correr este proyecto en tu entorno local, sigue estos pasos:
+
 
 ### Type-Check, Compile and Minify for Production
 
